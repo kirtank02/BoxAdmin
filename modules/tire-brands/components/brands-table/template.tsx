@@ -1,0 +1,24 @@
+import { PaginationInterface } from "@/types/pagination";
+import { TireBrand } from "@/types/tire-brand";
+import { TireBrandTable } from ".";
+import { getTireSuppliers } from "@/mocks/tire-suppliers";
+import { getTireBrands } from "@/mocks/Manager";
+import { TireSupplier } from "@/types/tire-supplier";
+
+
+export async function TireBrandTableTemplate() {
+  const data: TireBrand[] | null = await getTireBrands();
+  const suppliers: TireSupplier[] | null = await getTireSuppliers()
+
+  if (!data || !suppliers) {
+    return <div>No Manager found</div>;
+  }
+
+  const pagination: PaginationInterface = {
+    pageIndex: 1,
+    pageSize: 10,
+    totalCount: data.length,
+  };
+
+  return (<TireBrandTable data={data} pagination={pagination} suppliers={suppliers} />);
+}
