@@ -23,6 +23,8 @@ import {
    ArrowDownRight,
 } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/shadcn/dropdown-menu"
+import { jsPDF } from "jspdf"
+import autoTable from "jspdf-autotable"
 
 // Mock data for payments
 const mockPayments = [
@@ -35,7 +37,7 @@ const mockPayments = [
       amount: 120.5,
       status: "completed",
       method: "Credit Card",
-      paid_at: "2024-01-01",
+      paid_at: "2024-02-02",
       type: "booking",
    },
    {
@@ -132,13 +134,36 @@ function PaymentMethodIcon({ method }: { method: string }) {
    return <Icon className="w-4.5 h-4.5 text-gray-500" />
 }
 
+const months = [
+   "All Months",
+   "January",
+   "February",
+   "March",
+   "April",
+   "May",
+   "June",
+   "July",
+   "August",
+   "September",
+   "October",
+   "November",
+   "December",
+]
+
+const years = [
+   "All Years",
+   ...Array.from(new Set(mockPayments.map((p) => new Date(p.paid_at).getFullYear()))).map(String),
+]
+
 // Main Payments Dashboard Template
 export function PaymentsTemplate() {
    const [searchTerm, setSearchTerm] = useState("")
    const [statusFilter, setStatusFilter] = useState("all")
    const [methodFilter, setMethodFilter] = useState("all")
+   const [monthFilter, setMonthFilter] = useState("All Months")
+   const [yearFilter, setYearFilter] = useState("All Years")
 
-   // Filter payments based on search term, status, and method
+   // Filter payments based on search term, status, method, month, and year
    const filteredPayments = mockPayments.filter((payment) => {
       const matchesSearch =
          payment.transaction_id.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -146,8 +171,14 @@ export function PaymentsTemplate() {
          payment.booking_id.toLowerCase().includes(searchTerm.toLowerCase())
       const matchesStatus = statusFilter === "all" || payment.status === statusFilter
       const matchesMethod = methodFilter === "all" || payment.method === methodFilter
-
-      return matchesSearch && matchesStatus && matchesMethod
+      const paidDate = new Date(payment.paid_at)
+      const matchesMonth =
+         monthFilter === "All Months" ||
+         paidDate.getMonth() + 1 === months.indexOf(monthFilter)
+      const matchesYear =
+         yearFilter === "All Years" ||
+         paidDate.getFullYear().toString() === yearFilter
+      return matchesSearch && matchesStatus && matchesMethod && matchesMonth && matchesYear
    })
 
    // Calculate summary statistics
@@ -156,6 +187,51 @@ export function PaymentsTemplate() {
    const pendingAmount = mockPayments.filter((p) => p.status === "pending").reduce((sum, p) => sum + p.amount, 0)
    const successRate = (completedPayments / mockPayments.length) * 100 || 0;
 
+   // PDF Export Handler
+   const handleExportPDF = () => {
+      let title = "Payment Transactions";
+      if (monthFilter !== "All Months" && yearFilter !== "All Years") {
+         title += ` - ${monthFilter} ${yearFilter}`;
+      } else if (monthFilter !== "All Months") {
+         title += ` - ${monthFilter}`;
+      } else if (yearFilter !== "All Years") {
+         title += ` - ${yearFilter}`;
+      }
+      const doc = new jsPDF();
+      doc.setFontSize(16);
+      doc.text(title, 14, 16);
+      doc.setFontSize(10);
+      const headers = [
+         "Transaction ID",
+         "User Name",
+         "Amount",
+         "Status",
+         "Method",
+         "Paid At",
+         "Type"
+      ];
+      const data = filteredPayments.map((p) => [
+         p.transaction_id,
+         p.user_name,
+         `$${p.amount.toFixed(2)}`,
+         p.status.charAt(0).toUpperCase() + p.status.slice(1),
+         p.method,
+         p.paid_at,
+         p.type.charAt(0).toUpperCase() + p.type.slice(1)
+      ]);
+      autoTable(doc, {
+         head: [headers],
+         body: data,
+         startY: 24,
+         styles: { fontSize: 10, cellPadding: 3 },
+         headStyles: { fillColor: [49, 46, 129], textColor: 255, fontStyle: 'bold' },
+         alternateRowStyles: { fillColor: [245, 245, 245] },
+         margin: { left: 14, right: 14 },
+         tableLineColor: [200, 200, 200],
+         tableLineWidth: 0.1,
+      });
+      doc.save("payment_transactions.pdf");
+   };
 
    return (
       <div className="min-h-screen bg-gray-50 p-4 md:p-8 lg:p-12 font-sans antialiased">
@@ -174,7 +250,7 @@ export function PaymentsTemplate() {
                      <Calendar className="w-4 h-4 text-gray-500" />
                      <span className="font-medium">Last 30 days</span>
                   </Button>
-                  <Button className="gap-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-md hover:shadow-lg transition-all">
+                  <Button className="gap-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-md hover:shadow-lg transition-all" onClick={handleExportPDF}>
                      <Download className="w-4 h-4" />
                      <span className="font-medium">Export Data</span>
                   </Button>
@@ -269,17 +345,48 @@ export function PaymentsTemplate() {
 
             {/* Filters and Search Section */}
             <div className="flex flex-col sm:flex-row gap-4">
-               <div className="relative flex-1">
-                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+               <div className="relative flex-1 max-w-2xl w-full">
+                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none" />
                   <Input
                      placeholder="Search transactions, users, or booking IDs..."
                      value={searchTerm}
                      onChange={(e) => setSearchTerm(e.target.value)}
-                     className="pl-11 pr-4 py-2 border-gray-300 rounded-lg focus-visible:ring-indigo-500 focus-visible:ring-2 focus-visible:ring-offset-0 transition-all text-gray-800"
+                     className="pl-12 pr-10 py-2 bg-white border border-gray-200 rounded-full shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 text-gray-800 transition-all placeholder-gray-400 w-full"
+                     aria-label="Search transactions"
                   />
+                  {searchTerm && (
+                     <button
+                        type="button"
+                        aria-label="Clear search"
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
+                        onClick={() => setSearchTerm("")}
+                     >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                     </button>
+                  )}
                </div>
+               <Select value={monthFilter} onValueChange={setMonthFilter}>
+                  <SelectTrigger className="w-28 border-gray-300 rounded-lg text-gray-700 hover:border-gray-400 transition-colors text-xs h-9">
+                     <SelectValue placeholder="Month" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-lg shadow-lg">
+                     {months.map((month) => (
+                        <SelectItem key={month} value={month}>{month}</SelectItem>
+                     ))}
+                  </SelectContent>
+               </Select>
+               <Select value={yearFilter} onValueChange={setYearFilter}>
+                  <SelectTrigger className="w-24 border-gray-300 rounded-lg text-gray-700 hover:border-gray-400 transition-colors text-xs h-9">
+                     <SelectValue placeholder="Year" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-lg shadow-lg">
+                     {years.map((year) => (
+                        <SelectItem key={year} value={year}>{year}</SelectItem>
+                     ))}
+                  </SelectContent>
+               </Select>
                <Select value={statusFilter} onValueChange={setStatusFilter}>
-                  <SelectTrigger className="w-full sm:w-[180px] border-gray-300 rounded-lg text-gray-700 hover:border-gray-400 transition-colors">
+                  <SelectTrigger className="w-32 border-gray-300 rounded-lg text-gray-700 hover:border-gray-400 transition-colors text-xs h-9">
                      <SelectValue placeholder="All Status" />
                   </SelectTrigger>
                   <SelectContent className="rounded-lg shadow-lg">
@@ -290,7 +397,7 @@ export function PaymentsTemplate() {
                   </SelectContent>
                </Select>
                <Select value={methodFilter} onValueChange={setMethodFilter}>
-                  <SelectTrigger className="w-full sm:w-[180px] border-gray-300 rounded-lg text-gray-700 hover:border-gray-400 transition-colors">
+                  <SelectTrigger className="w-32 border-gray-300 rounded-lg text-gray-700 hover:border-gray-400 transition-colors text-xs h-9">
                      <SelectValue placeholder="All Methods" />
                   </SelectTrigger>
                   <SelectContent className="rounded-lg shadow-lg">
@@ -301,9 +408,9 @@ export function PaymentsTemplate() {
                      <SelectItem value="Apple Pay">Apple Pay</SelectItem>
                   </SelectContent>
                </Select>
-               <Button variant="outline" className="gap-2 border-gray-300 text-gray-700 hover:bg-gray-100 transition-all rounded-lg shadow-sm">
+               <Button variant="outline" size="sm" className="gap-2 border-gray-300 text-gray-700 hover:bg-gray-100 transition-all rounded-lg shadow-sm h-9 px-3 text-xs min-w-fit">
                   <Filter className="w-4 h-4 text-gray-500" />
-                  <span className="font-medium">More Filters</span>
+                  <span className="font-medium">More</span>
                </Button>
             </div>
 
@@ -429,4 +536,4 @@ export function PaymentsTemplate() {
          </div>
       </div>
    )
-}
+} 
