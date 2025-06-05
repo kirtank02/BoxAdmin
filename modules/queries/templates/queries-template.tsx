@@ -10,6 +10,7 @@ export function QueriesTemplate() {
                [Customer Queries & Resolution Status UI]
                <p>Hello</p>
                <h1>hllo</h1>
+               <h1>hello brother</h1>
             </div>
          </div>
          {/* Add more query management widgets as needed */}
