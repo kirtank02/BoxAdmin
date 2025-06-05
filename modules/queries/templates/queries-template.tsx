@@ -11,6 +11,7 @@ export function QueriesTemplate() {
                <p>Hello</p>
                <h1>hllo</h1>
                <h1>hello brother</h1>
+               <h3>hello kalpesh</h3>
             </div>
          </div>
          {/* Add more query management widgets as needed */}
