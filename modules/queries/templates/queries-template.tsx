@@ -8,6 +8,7 @@ export function QueriesTemplate() {
             <h2 className="text-lg font-semibold mb-2">Query History & Resolution Status</h2>
             <div className="h-48 flex items-center justify-center text-gray-400">
                [Customer Queries & Resolution Status UI]
+               <p>Hello</p>
             </div>
          </div>
          {/* Add more query management widgets as needed */}
