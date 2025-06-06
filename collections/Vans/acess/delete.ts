@@ -12,7 +12,7 @@ export const deleteAccess: Access<Technician> = ({ req }) => {
     return false
   }
 
-  if (isSuperAdmin(req.user) || isOwner(req.user) || istire - brands(req.user)) {
+  if (isSuperAdmin(req.user) || isOwner(req.user) || isManager(req.user)) {
     return true
   }
 
