@@ -1,4 +1,4 @@
-import { HomepageTemplate } from "@/modules/homepage/templates/homepage-template";
+import { CricketDashboard } from "@/modules/homepage/templates/homepage-template";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function Homepage() {
-  return <HomepageTemplate />;
+  return <CricketDashboard />;
 }

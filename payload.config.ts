@@ -6,11 +6,6 @@ import { fileURLToPath } from "url";
 import { Pages } from "./collections/Pages";
 import { Tenants } from "./collections/Tenants";
 import Users from "./collections/Users";
-import { multiTenantPlugin } from "@payloadcms/plugin-multi-tenant";
-import { isSuperAdmin } from "./access/isSuperAdmin";
-import type { Config } from "./payload-types";
-import { getUserTenantIDs } from "./utilities/getUserTenantIDs";
-import { seed } from "./seed";
 import { Vans } from "./collections/Vans";
 import { Media } from "./collections/Media";
 import { Technicians } from "./collections/Technicians";
@@ -18,8 +13,16 @@ import { Services } from "./collections/Services";
 import { Territory } from "./collections/Territory";
 import { Configurations } from "./collections/Configurations";
 import { StateEnvironmental } from "./collections/State Environmental";
-import { territoryCheckPoint } from "./endpoints/territoryContains";
-import { territoryQuery } from "./endpoints/territoryContains";
+import OwnerOrganizations from "./collections/Owner";
+import { Courts } from "./collections/courts";
+import { Court_Price_Slot } from "./collections/court_price_slot";
+import { Refund } from "./collections/refunds";
+import { Payment } from "./collections/payments";
+import { User } from "./collections/user";
+import { Booking } from "./collections/Bookings";
+import { Managers } from "./collections/Managers";
+import Venues from "./collections/Venues";
+import Offer from "./collections/offer";
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
@@ -39,6 +42,16 @@ export default buildConfig({
     Territory,
     Configurations,
     StateEnvironmental,
+    OwnerOrganizations,
+    Courts,
+    Court_Price_Slot,
+    Refund,
+    Payment,
+    User,
+    Booking,
+    Managers,
+    Venues,
+    Offer,
   ],
   db: postgresAdapter({
     pool: {
@@ -58,37 +71,5 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, "payload-types.ts"),
   },
-  plugins: [
-    multiTenantPlugin<Config>({
-      collections: {
-        pages: {},
-        technicians: {},
-        vans: {},
-        media: {},
-        services: {},
-        territory: {},
-        configurations: {},
-        "state-environmental": {},
-      },
-      tenantField: {
-        access: {
-          read: () => true,
-          update: ({ req }) => {
-            if (isSuperAdmin(req.user)) {
-              return true;
-            }
-            return getUserTenantIDs(req.user).length > 0;
-          },
-        },
-      },
-      tenantsArrayField: {
-        includeDefaultField: false,
-      },
-      userHasAccessToAllTenants: (user) => isSuperAdmin(user),
-    }),
-  ],
-  endpoints: [
-    territoryQuery,
-    territoryCheckPoint,
-  ]
+  // plugins and endpoints removed
 });

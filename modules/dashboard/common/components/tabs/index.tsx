@@ -19,14 +19,14 @@ export function HomepageTabs() {
       value={activeTab}
       onValueChange={onTabChange}
     >
-      <TabsList>
+      {/* <TabsList>
         <TabsTrigger value="/">
           All orders
         </TabsTrigger>
         <TabsTrigger value="/appointments">
           Appointments
         </TabsTrigger>
-      </TabsList>
+      </TabsList> */}
     </Tabs>
   );
 }

@@ -77,6 +77,16 @@ export interface Config {
     territory: Territory;
     configurations: Configuration;
     'state-environmental': StateEnvironmental;
+    owner_organizations: OwnerOrganization;
+    courts: Court;
+    'court-price-slot': CourtPriceSlot;
+    refunds: Refund;
+    payments: Payment;
+    user: User1;
+    bookings: Booking;
+    managers: Manager;
+    venues: Venue;
+    offers: Offer;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -97,6 +107,16 @@ export interface Config {
     territory: TerritorySelect<false> | TerritorySelect<true>;
     configurations: ConfigurationsSelect<false> | ConfigurationsSelect<true>;
     'state-environmental': StateEnvironmentalSelect<false> | StateEnvironmentalSelect<true>;
+    owner_organizations: OwnerOrganizationsSelect<false> | OwnerOrganizationsSelect<true>;
+    courts: CourtsSelect<false> | CourtsSelect<true>;
+    'court-price-slot': CourtPriceSlotSelect<false> | CourtPriceSlotSelect<true>;
+    refunds: RefundsSelect<false> | RefundsSelect<true>;
+    payments: PaymentsSelect<false> | PaymentsSelect<true>;
+    user: UserSelect<false> | UserSelect<true>;
+    bookings: BookingsSelect<false> | BookingsSelect<true>;
+    managers: ManagersSelect<false> | ManagersSelect<true>;
+    venues: VenuesSelect<false> | VenuesSelect<true>;
+    offers: OffersSelect<false> | OffersSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -139,11 +159,56 @@ export interface UserAuthOperations {
  */
 export interface Page {
   id: number;
-  tenant?: (number | null) | Tenant;
   title?: string | null;
   slug?: string | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users".
+ */
+export interface User {
+  id: number;
+  roles?: ('super-admin' | 'owner' | 'manager' | 'technician')[] | null;
+  name: string;
+  profilePhoto?: (number | null) | Media;
+  tenants?:
+    | {
+        tenant: number | Tenant;
+        roles: ('tenant-admin' | 'tenant-viewer')[];
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  password?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: number;
+  alt: string;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -183,58 +248,10 @@ export interface Tenant {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
- */
-export interface Media {
-  id: number;
-  tenant?: (number | null) | Tenant;
-  alt: string;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users".
- */
-export interface User {
-  id: number;
-  roles?: ('super-admin' | 'owner' | 'Manager' | 'technician')[] | null;
-  name: string;
-  profilePhoto?: (number | null) | Media;
-  tenants?:
-    | {
-        tenant: number | Tenant;
-        roles: ('tenant-admin' | 'tenant-viewer')[];
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt: string;
-  createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  password?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "vans".
  */
 export interface Van {
   id: number;
-  tenant?: (number | null) | Tenant;
   vehicleId: string;
   /**
    * Enter the year and make (e.g., 2023 Mercedes Sprinter)
@@ -259,7 +276,6 @@ export interface Van {
  */
 export interface Technician {
   id: number;
-  tenant?: (number | null) | Tenant;
   name: string;
   email: string;
   password: string;
@@ -279,7 +295,6 @@ export interface Technician {
  */
 export interface Service {
   id: number;
-  tenant?: (number | null) | Tenant;
   tyre_type?: ('8' | '6' | '5' | '4' | '3' | '2' | '1') | null;
   price: number;
   duration?: string | null;
@@ -296,7 +311,6 @@ export interface Service {
  */
 export interface Territory {
   id: number;
-  tenant?: (number | null) | Tenant;
   name: string;
   polygon: {
     lat: number;
@@ -322,7 +336,6 @@ export interface Territory {
  */
 export interface Configuration {
   id: number;
-  tenant?: (number | null) | Tenant;
   territory: number | Territory;
   configuration_id: string;
   updatedAt: string;
@@ -334,7 +347,6 @@ export interface Configuration {
  */
 export interface StateEnvironmental {
   id: number;
-  tenant?: (number | null) | Tenant;
   state: string;
   fees?:
     | {
@@ -343,6 +355,159 @@ export interface StateEnvironmental {
         id?: string | null;
       }[]
     | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "owner_organizations".
+ */
+export interface OwnerOrganization {
+  id: number;
+  name: string;
+  email: string;
+  phone?: string | null;
+  password_hash: string;
+  calcom_org_id?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "courts".
+ */
+export interface Court {
+  id: number;
+  venue: number | Venue;
+  name: string;
+  area: string;
+  surface: 'turf' | 'mat' | 'clay' | 'concrete' | 'grass';
+  sport_type: 'box_cricket' | 'football' | 'badminton' | 'tennis' | 'volleyball';
+  max_players: number;
+  calcom_member_id: string;
+  calcom_event_type_id: string;
+  rating: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "venues".
+ */
+export interface Venue {
+  id: number;
+  owner_org: number | OwnerOrganization;
+  name: string;
+  lat: number;
+  lng: number;
+  full_address: string;
+  description?: string | null;
+  rating?: number | null;
+  calcom_team_id?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "court-price-slot".
+ */
+export interface CourtPriceSlot {
+  id: number;
+  court_id: number | Court;
+  day_of_week: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
+  start_time: string;
+  end_time: string;
+  price_per_hour: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "refunds".
+ */
+export interface Refund {
+  id: number;
+  payment_id: number | Payment;
+  amount: number;
+  reason: string;
+  refund_status: string;
+  refunded_at: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payments".
+ */
+export interface Payment {
+  id: number;
+  booking_id: number | Booking;
+  user_id: number | User;
+  amount: number;
+  status: string;
+  method: string;
+  transaction_id: string;
+  paid_at: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bookings".
+ */
+export interface Booking {
+  id: number;
+  user_id: number | User;
+  court_id: number | Court;
+  start_date_time: string;
+  end_date_time: string;
+  status: string;
+  calcom_booking_id?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "user".
+ */
+export interface User1 {
+  id: number;
+  name: string;
+  email: string;
+  password_hash: string;
+  phone: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "managers".
+ */
+export interface Manager {
+  id: number;
+  venue: number | Venue;
+  name: string;
+  email: string;
+  phone: string;
+  created_by: number | OwnerOrganization;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "offers".
+ */
+export interface Offer {
+  id: number;
+  venue_id: number | Venue;
+  title: string;
+  description?: string | null;
+  offer_type?: string | null;
+  discount_value?: number | null;
+  min_booking_amount?: number | null;
+  valid_from?: string | null;
+  valid_to?: string | null;
+  is_active?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -392,6 +557,46 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'state-environmental';
         value: number | StateEnvironmental;
+      } | null)
+    | ({
+        relationTo: 'owner_organizations';
+        value: number | OwnerOrganization;
+      } | null)
+    | ({
+        relationTo: 'courts';
+        value: number | Court;
+      } | null)
+    | ({
+        relationTo: 'court-price-slot';
+        value: number | CourtPriceSlot;
+      } | null)
+    | ({
+        relationTo: 'refunds';
+        value: number | Refund;
+      } | null)
+    | ({
+        relationTo: 'payments';
+        value: number | Payment;
+      } | null)
+    | ({
+        relationTo: 'user';
+        value: number | User1;
+      } | null)
+    | ({
+        relationTo: 'bookings';
+        value: number | Booking;
+      } | null)
+    | ({
+        relationTo: 'managers';
+        value: number | Manager;
+      } | null)
+    | ({
+        relationTo: 'venues';
+        value: number | Venue;
+      } | null)
+    | ({
+        relationTo: 'offers';
+        value: number | Offer;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -440,7 +645,6 @@ export interface PayloadMigration {
  * via the `definition` "pages_select".
  */
 export interface PagesSelect<T extends boolean = true> {
-  tenant?: T;
   title?: T;
   slug?: T;
   updatedAt?: T;
@@ -493,7 +697,6 @@ export interface TenantsSelect<T extends boolean = true> {
  * via the `definition` "vans_select".
  */
 export interface VansSelect<T extends boolean = true> {
-  tenant?: T;
   vehicleId?: T;
   yearAndMake?: T;
   modelTrim?: T;
@@ -507,7 +710,6 @@ export interface VansSelect<T extends boolean = true> {
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
-  tenant?: T;
   alt?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -526,7 +728,6 @@ export interface MediaSelect<T extends boolean = true> {
  * via the `definition` "technicians_select".
  */
 export interface TechniciansSelect<T extends boolean = true> {
-  tenant?: T;
   name?: T;
   email?: T;
   password?: T;
@@ -545,7 +746,6 @@ export interface TechniciansSelect<T extends boolean = true> {
  * via the `definition` "services_select".
  */
 export interface ServicesSelect<T extends boolean = true> {
-  tenant?: T;
   tyre_type?: T;
   price?: T;
   duration?: T;
@@ -561,7 +761,6 @@ export interface ServicesSelect<T extends boolean = true> {
  * via the `definition` "territory_select".
  */
 export interface TerritorySelect<T extends boolean = true> {
-  tenant?: T;
   name?: T;
   polygon?:
     | T
@@ -580,7 +779,6 @@ export interface TerritorySelect<T extends boolean = true> {
  * via the `definition` "configurations_select".
  */
 export interface ConfigurationsSelect<T extends boolean = true> {
-  tenant?: T;
   territory?: T;
   configuration_id?: T;
   updatedAt?: T;
@@ -591,7 +789,6 @@ export interface ConfigurationsSelect<T extends boolean = true> {
  * via the `definition` "state-environmental_select".
  */
 export interface StateEnvironmentalSelect<T extends boolean = true> {
-  tenant?: T;
   state?: T;
   fees?:
     | T
@@ -600,6 +797,149 @@ export interface StateEnvironmentalSelect<T extends boolean = true> {
         description?: T;
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "owner_organizations_select".
+ */
+export interface OwnerOrganizationsSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  phone?: T;
+  password_hash?: T;
+  calcom_org_id?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "courts_select".
+ */
+export interface CourtsSelect<T extends boolean = true> {
+  venue?: T;
+  name?: T;
+  area?: T;
+  surface?: T;
+  sport_type?: T;
+  max_players?: T;
+  calcom_member_id?: T;
+  calcom_event_type_id?: T;
+  rating?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "court-price-slot_select".
+ */
+export interface CourtPriceSlotSelect<T extends boolean = true> {
+  court_id?: T;
+  day_of_week?: T;
+  start_time?: T;
+  end_time?: T;
+  price_per_hour?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "refunds_select".
+ */
+export interface RefundsSelect<T extends boolean = true> {
+  payment_id?: T;
+  amount?: T;
+  reason?: T;
+  refund_status?: T;
+  refunded_at?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payments_select".
+ */
+export interface PaymentsSelect<T extends boolean = true> {
+  booking_id?: T;
+  user_id?: T;
+  amount?: T;
+  status?: T;
+  method?: T;
+  transaction_id?: T;
+  paid_at?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "user_select".
+ */
+export interface UserSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  password_hash?: T;
+  phone?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bookings_select".
+ */
+export interface BookingsSelect<T extends boolean = true> {
+  user_id?: T;
+  court_id?: T;
+  start_date_time?: T;
+  end_date_time?: T;
+  status?: T;
+  calcom_booking_id?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "managers_select".
+ */
+export interface ManagersSelect<T extends boolean = true> {
+  venue?: T;
+  name?: T;
+  email?: T;
+  phone?: T;
+  created_by?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "venues_select".
+ */
+export interface VenuesSelect<T extends boolean = true> {
+  owner_org?: T;
+  name?: T;
+  lat?: T;
+  lng?: T;
+  full_address?: T;
+  description?: T;
+  rating?: T;
+  calcom_team_id?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "offers_select".
+ */
+export interface OffersSelect<T extends boolean = true> {
+  venue_id?: T;
+  title?: T;
+  description?: T;
+  offer_type?: T;
+  discount_value?: T;
+  min_booking_amount?: T;
+  valid_from?: T;
+  valid_to?: T;
+  is_active?: T;
   updatedAt?: T;
   createdAt?: T;
 }

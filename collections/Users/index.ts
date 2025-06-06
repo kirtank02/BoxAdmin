@@ -53,7 +53,7 @@ const Users: CollectionConfig = {
       type: 'select',
       defaultValue: ['owner'],
       hasMany: true,
-      options: ['super-admin', 'owner', 'Manager', 'technician'],
+      options: ['super-admin', 'owner', 'manager', 'technician'],
       access: {
         update: ({ req }) => {
           return isSuperAdmin(req.user);

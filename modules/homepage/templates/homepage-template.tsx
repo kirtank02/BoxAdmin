@@ -4,10 +4,9 @@ import { useState } from "react"
 import { Button } from "@/components/shadcn/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/shadcn/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/shadcn/select"
-import { Calendar, DollarSign, Download, TrendingUp, Users, Activity, BarChart3 } from "lucide-react"
+import { Calendar, Download, TrendingUp, Users, Activity, BarChart3 } from "lucide-react"
 import { jsPDF } from "jspdf"
 import autoTable from "jspdf-autotable"
-
 import {
    BarChart,
    Bar,
@@ -176,27 +175,29 @@ export function CricketDashboard() {
             {/* Summary Cards Section */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                {/* Total Revenue Card */}
-               <Card className="relative rounded-xl shadow-lg bg-white overflow-hidden transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl">
+               <Card className="relative border border-gray-200 rounded-xl shadow-lg bg-white overflow-hidden">
                   <CardContent className="p-6">
                      <div className="flex flex-col">
                         <div className="text-sm font-medium text-gray-500">Total Revenue</div>
                         <div className="mt-3 flex items-baseline">
-                           <span className="text-4xl font-extrabold text-indigo-700">
-                              ₹{totalRevenue.toLocaleString("en-IN")}
-                           </span>
+                           <span className="text-4xl font-bold text-gray-900">₹{totalRevenue.toLocaleString('en-IN', {
+                              maximumFractionDigits: 0,
+                              minimumFractionDigits: 0
+                           })}</span>
                         </div>
-                        <div className="mt-3 flex items-center text-sm font-semibold text-green-600">
-                           <TrendingUp className="w-4 h-4 mr-1 transition-transform duration-300 group-hover:translate-x-0.5" />
-                           <span>+15.2% from last period</span>
+                        <div className="mt-3 flex items-center text-sm text-green-600 font-medium">
+                           <TrendingUp className="w-4 h-4 mr-1" />
+                           +15.2% from last period
                         </div>
                         <div className="absolute top-6 right-6">
-                           <div className="rounded-full bg-indigo-50 p-3 text-indigo-600 shadow-md transition-all duration-300 group-hover:rotate-6 group-hover:scale-110">
-                              <DollarSign className="w-6 h-6" /> {/* Using DollarSign icon for revenue */}
+                           <div className="rounded-full bg-blue-100 p-3 shadow-inner">
+                              <BarChart3 className="w-6 h-6 text-blue-600" />
                            </div>
                         </div>
                      </div>
                   </CardContent>
                </Card>
+
                {/* Total Bookings Card */}
                <Card className="relative border border-gray-200 rounded-xl shadow-lg bg-white overflow-hidden">
                   <CardContent className="p-6">
