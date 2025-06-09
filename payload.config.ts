@@ -11,6 +11,7 @@ import { Media } from "./collections/Media";
 import { Technicians } from "./collections/Technicians";
 import { Services } from "./collections/Services";
 import { Territory } from "./collections/Territory";
+import { MyBrand } from "./collections/MyBrand";
 import { Configurations } from "./collections/Configurations";
 import { StateEnvironmental } from "./collections/State Environmental";
 import OwnerOrganizations from "./collections/Owner";
@@ -18,7 +19,7 @@ import { Courts } from "./collections/courts";
 import { Court_Price_Slot } from "./collections/court_price_slot";
 import { Refund } from "./collections/refunds";
 import { Payment } from "./collections/payments";
-import { User } from "./collections/user";
+import { User } from "./collections/User";
 import { Booking } from "./collections/Bookings";
 import { Managers } from "./collections/Managers";
 import Venues from "./collections/Venues";
@@ -50,6 +51,7 @@ export default buildConfig({
     User,
     Booking,
     Managers,
+    MyBrand,
     Venues,
     Offer,
   ],

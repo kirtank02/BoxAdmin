@@ -85,6 +85,7 @@ export interface Config {
     user: User1;
     bookings: Booking;
     managers: Manager;
+    mybrand: Mybrand;
     venues: Venue;
     offers: Offer;
     'payload-locked-documents': PayloadLockedDocument;
@@ -115,6 +116,7 @@ export interface Config {
     user: UserSelect<false> | UserSelect<true>;
     bookings: BookingsSelect<false> | BookingsSelect<true>;
     managers: ManagersSelect<false> | ManagersSelect<true>;
+    mybrand: MybrandSelect<false> | MybrandSelect<true>;
     venues: VenuesSelect<false> | VenuesSelect<true>;
     offers: OffersSelect<false> | OffersSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -495,6 +497,24 @@ export interface Manager {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "mybrand".
+ */
+export interface Mybrand {
+  id: number;
+  user?: string | null;
+  logo: number | Media;
+  coverImage: number | Media;
+  colorPalette: {
+    name: 'primary' | 'light1' | 'light2' | 'dark';
+    value: string;
+    id?: string | null;
+  }[];
+  fontStyle: 'Inter' | 'Roboto' | 'Poppins' | 'Lato' | 'Montserrat';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "offers".
  */
 export interface Offer {
@@ -589,6 +609,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'managers';
         value: number | Manager;
+      } | null)
+    | ({
+        relationTo: 'mybrand';
+        value: number | Mybrand;
       } | null)
     | ({
         relationTo: 'venues';
@@ -907,6 +931,25 @@ export interface ManagersSelect<T extends boolean = true> {
   email?: T;
   phone?: T;
   created_by?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "mybrand_select".
+ */
+export interface MybrandSelect<T extends boolean = true> {
+  user?: T;
+  logo?: T;
+  coverImage?: T;
+  colorPalette?:
+    | T
+    | {
+        name?: T;
+        value?: T;
+        id?: T;
+      };
+  fontStyle?: T;
   updatedAt?: T;
   createdAt?: T;
 }
