@@ -18,7 +18,6 @@ import { Courts } from "./collections/courts";
 import { Court_Price_Slot } from "./collections/court_price_slot";
 import { Refund } from "./collections/refunds";
 import { Payment } from "./collections/payments";
-import { User } from "./collections/user";
 import { Booking } from "./collections/Bookings";
 import { Managers } from "./collections/Managers";
 import Venues from "./collections/Venues";
@@ -47,7 +46,6 @@ export default buildConfig({
     Court_Price_Slot,
     Refund,
     Payment,
-    User,
     Booking,
     Managers,
     Venues,

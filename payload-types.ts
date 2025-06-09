@@ -82,7 +82,6 @@ export interface Config {
     'court-price-slot': CourtPriceSlot;
     refunds: Refund;
     payments: Payment;
-    user: User1;
     bookings: Booking;
     managers: Manager;
     venues: Venue;
@@ -112,7 +111,6 @@ export interface Config {
     'court-price-slot': CourtPriceSlotSelect<false> | CourtPriceSlotSelect<true>;
     refunds: RefundsSelect<false> | RefundsSelect<true>;
     payments: PaymentsSelect<false> | PaymentsSelect<true>;
-    user: UserSelect<false> | UserSelect<true>;
     bookings: BookingsSelect<false> | BookingsSelect<true>;
     managers: ManagersSelect<false> | ManagersSelect<true>;
     venues: VenuesSelect<false> | VenuesSelect<true>;
@@ -468,19 +466,6 @@ export interface Booking {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "user".
- */
-export interface User1 {
-  id: number;
-  name: string;
-  email: string;
-  password_hash: string;
-  phone: number;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "managers".
  */
 export interface Manager {
@@ -577,10 +562,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'payments';
         value: number | Payment;
-      } | null)
-    | ({
-        relationTo: 'user';
-        value: number | User1;
       } | null)
     | ({
         relationTo: 'bookings';
@@ -868,18 +849,6 @@ export interface PaymentsSelect<T extends boolean = true> {
   method?: T;
   transaction_id?: T;
   paid_at?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "user_select".
- */
-export interface UserSelect<T extends boolean = true> {
-  name?: T;
-  email?: T;
-  password_hash?: T;
-  phone?: T;
   updatedAt?: T;
   createdAt?: T;
 }
