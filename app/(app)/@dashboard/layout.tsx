@@ -19,12 +19,12 @@ export default async function Layout({
         <Header />
         <div className="flex flex-1">
           <NavigationSidebar permissions={permissions} />
-          <SidebarInset className="md:max-w-[calc(100%-17.5rem)] w-full">
+          <SidebarInset className="md:max-w-[calc(100%-17.5rem)] w-full -mt-10">
             <HomepageTabs />
             {children}
           </SidebarInset>
         </div>
-      </SidebarProvider>
+      </SidebarProvider>  
     </div>
   );
 }

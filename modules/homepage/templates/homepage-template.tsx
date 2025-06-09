@@ -198,7 +198,8 @@ export function CricketDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-8 lg:p-12 font-sans antialiased">
+    // <div className="min-h-screen bg-gray-50 p-4 md:p-8 lg:p-12 font-sans antialiased">
+    <div className="min-h-screen bg-gray-50 pt-2 pb-8 px-4 md:px-8 lg:px-12 font-sans antialiased">
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Header Section */}
         <div>
@@ -253,7 +254,7 @@ export function CricketDashboard() {
                   Total Revenue
                 </div>
                 <div className="mt-3 flex items-baseline">
-                  <span className="text-4xl font-bold text-gray-900">
+                  <span className="text-3xl font-bold text-gray-900">
                     ₹
                     {totalRevenue.toLocaleString("en-IN", {
                       maximumFractionDigits: 0,
@@ -262,12 +263,12 @@ export function CricketDashboard() {
                   </span>
                 </div>
                 <div className="mt-3 flex items-center text-sm text-green-600 font-medium">
-                  <TrendingUp className="w-4 h-4 mr-1" />
+                  <TrendingUp className="w-4 h-4 mr-2" />
                   +15.2% from last period
                 </div>
                 <div className="absolute top-6 right-6">
-                  <div className="rounded-full bg-blue-100 p-3 shadow-inner">
-                    <BarChart3 className="w-6 h-6 text-blue-600" />
+                  <div className="rounded-full bg-blue-100 p-1 shadow-inner">
+                    <BarChart3 className="w-4 h-4 text-blue-600" />
                   </div>
                 </div>
               </div>
@@ -282,17 +283,17 @@ export function CricketDashboard() {
                   Total Bookings
                 </div>
                 <div className="mt-3 flex items-baseline">
-                  <span className="text-4xl font-bold text-gray-900">
+                  <span className="text-3xl font-bold text-gray-900">
                     {totalBookings}
                   </span>
                 </div>
                 <div className="mt-3 flex items-center text-sm text-green-600 font-medium">
-                  <TrendingUp className="w-4 h-4 mr-1" />
+                  <TrendingUp className="w-4 h-4 mr-2" />
                   +8.7% from last period
                 </div>
                 <div className="absolute top-6 right-6">
-                  <div className="rounded-full bg-green-100 p-3 shadow-inner">
-                    <Calendar className="w-6 h-6 text-green-600" />
+                  <div className="rounded-full bg-green-100 p-1 shadow-inner">
+                    <Calendar className="w-4 h-4 text-green-600" />
                   </div>
                 </div>
               </div>
@@ -307,17 +308,17 @@ export function CricketDashboard() {
                   Avg. Booking Value
                 </div>
                 <div className="mt-3 flex items-baseline">
-                  <span className="text-4xl font-bold text-gray-900">
+                  <span className="text-3xl font-bold text-gray-900">
                     ₹{averageBookingValue.toFixed(0)}
                   </span>
                 </div>
                 <div className="mt-3 flex items-center text-sm text-green-600 font-medium">
-                  <TrendingUp className="w-4 h-4 mr-1" />
+                  <TrendingUp className="w-4 h-4 mr-2" />
                   +5.3% from last period
                 </div>
                 <div className="absolute top-6 right-6">
-                  <div className="rounded-full bg-yellow-100 p-3 shadow-inner">
-                    <Users className="w-6 h-6 text-yellow-600" />
+                  <div className="rounded-full bg-yellow-100 p-1 shadow-inner">
+                    <Users className="w-4 h-4 text-yellow-600" />
                   </div>
                 </div>
               </div>
@@ -332,17 +333,17 @@ export function CricketDashboard() {
                   Peak Utilization
                 </div>
                 <div className="mt-3 flex items-baseline">
-                  <span className="text-4xl font-bold text-gray-900">
+                  <span className="text-3xl font-bold text-gray-900">
                     {peakUtilization}%
                   </span>
                 </div>
                 <div className="mt-3 flex items-center text-sm text-green-600 font-medium">
-                  <TrendingUp className="w-4 h-4 mr-1" />
+                  <TrendingUp className="w-4 h-4 mr-2" />
                   +3.1% from last period
                 </div>
                 <div className="absolute top-6 right-6">
-                  <div className="rounded-full bg-purple-100 p-3 shadow-inner">
-                    <Activity className="w-6 h-6 text-purple-600" />
+                  <div className="rounded-full bg-purple-100 p-1 shadow-inner">
+                    <Activity className="w-4 h-4 text-purple-600" />
                   </div>
                 </div>
               </div>
@@ -351,7 +352,9 @@ export function CricketDashboard() {
         </div>
 
         {/* Calender */}
-        <div className="container mx-auto p-4">
+        {/* <div className="container mx-auto"> */}
+        {/* <div className="container mx-auto relative border border-gray-200 rounded-xl shadow-lg bg-white overflow-hidden"> */}
+        <div className="h-[500px] mx-auto relative border border-gray-200 rounded-xl shadow-lg bg-white overflow-y-auto">
           <EventCalendar
             events={events}
             onEventAdd={handleEventAdd}
@@ -361,7 +364,7 @@ export function CricketDashboard() {
         </div>
 
         {/* Charts Section - First Row */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {/* Booking Trends Chart */}
           <Card className="border border-gray-200 rounded-xl shadow-lg bg-white overflow-hidden">
             <CardHeader className="pb-0">
@@ -369,14 +372,14 @@ export function CricketDashboard() {
                 Booking & Revenue Trends
               </CardTitle>
             </CardHeader>
-            <CardContent className="pt-4">
+            <CardContent className="pt-6">
               <div className="h-80">
-                <ResponsiveContainer width="100%" height="100%">
+                <ResponsiveContainer width="90%" height="90%">
                   <LineChart
                     data={
                       timeRange === "daily" ? dailyBookings : monthlyBookings
                     }
-                    margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                    margin={{ top: 20, right: 10, left: 20, bottom: 0 }}
                   >
                     <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                     <XAxis
@@ -429,12 +432,12 @@ export function CricketDashboard() {
                 Time Slot Popularity
               </CardTitle>
             </CardHeader>
-            <CardContent className="pt-4">
+            <CardContent className="pt-6">
               <div className="h-80">
-                <ResponsiveContainer width="100%" height="100%">
+                <ResponsiveContainer width="90%" height="90%">
                   <BarChart
                     data={timeSlotPopularity}
-                    margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                    margin={{ top: 20, right: 10, left: 20, bottom: 0 }}
                   >
                     <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                     <XAxis dataKey="name" tick={{ fill: "#6b7280" }} />
@@ -470,21 +473,21 @@ export function CricketDashboard() {
         </div>
 
         {/* Charts Section - Second Row */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Court Utilization Chart */}
           <Card className="border border-gray-200 rounded-xl shadow-lg bg-white overflow-hidden">
             <CardHeader className="pb-0">
-              <CardTitle className="text-lg font-semibold text-gray-800">
+              <CardTitle className="text-md font-semibold text-gray-800">
                 Court Utilization
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-4">
               <div className="h-64">
-                <ResponsiveContainer width="100%" height="100%">
+                <ResponsiveContainer width="100%" height="80%">
                   <RadarChart
                     cx="50%"
-                    cy="50%"
-                    outerRadius="80%"
+                    cy="55%"
+                    outerRadius="90%"
                     data={courtUtilization}
                   >
                     <PolarGrid stroke="#e5e7eb" />
@@ -523,7 +526,7 @@ export function CricketDashboard() {
           {/* Customer Segmentation Chart */}
           <Card className="border border-gray-200 rounded-xl shadow-lg bg-white overflow-hidden">
             <CardHeader className="pb-0">
-              <CardTitle className="text-lg font-semibold text-gray-800">
+              <CardTitle className="text-md font-semibold text-gray-800">
                 Customer Segmentation
               </CardTitle>
             </CardHeader>
@@ -568,7 +571,7 @@ export function CricketDashboard() {
           {/* Package Popularity Chart */}
           <Card className="border border-gray-200 rounded-xl shadow-lg bg-white overflow-hidden">
             <CardHeader className="pb-0">
-              <CardTitle className="text-lg font-semibold text-gray-800">
+              <CardTitle className="text-md font-semibold text-gray-800">
                 Package Popularity
               </CardTitle>
             </CardHeader>
