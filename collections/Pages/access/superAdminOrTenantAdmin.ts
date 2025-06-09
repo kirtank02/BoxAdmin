@@ -12,7 +12,7 @@ export const superAdminOrTenantAdminAccess: Access = ({ req }) => {
     return false
   }
 
-  if (isSuperAdmin(req.user) || isOwner(req.user) || istire - brands(req.user)) {
+  if (isSuperAdmin(req.user) || isOwner(req.user) || isManager(req.user)) {
     return true
   }
 
