@@ -22,14 +22,6 @@ export const menuItems = {
       matchNested: true,
     },
     {
-      title: "Venues",
-      url: "/venues",
-      icon: Map,
-      isActive: false,
-      isExpandable: false,
-      matchNested: true,
-    },
-    {
       title: "Manager",
       url: "/manager",
       icon: BadgeCheck,
